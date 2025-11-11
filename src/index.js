@@ -19,7 +19,7 @@ if (!geminiApiKey) {
   throw new Error('Missing Gemini API key. Please set GEMINI_API_KEY.');
 }
 
-const geminiModel = process.env.GEMINI_MODEL || 'gemini-pro';
+const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-001';
 const geminiApiUrl = `https://generativelanguage.googleapis.com/v1/models/${geminiModel}:generateContent`;
 const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
 
