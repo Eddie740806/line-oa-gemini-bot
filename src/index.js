@@ -179,18 +179,18 @@ async function handleEvent(event) {
 
 async function callGemini(prompt) {
   const payload = {
-    system_instruction: {
-      role: 'system',
-      parts: [{ text: systemInstruction }],
-    },
     contents: [
       {
-        role: 'user',
+        role: 'system',
         parts: [
+          { text: systemInstruction },
           { text: '以下是客服人員必備的參考資料，回覆時請根據內容提供精準、同理的答案：' },
           { text: knowledgeContext },
-          { text: `客戶提問：${prompt}` },
         ],
+      },
+      {
+        role: 'user',
+        parts: [{ text: `客戶提問：${prompt}` }],
       },
     ],
   };
