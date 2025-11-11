@@ -181,12 +181,49 @@ async function handleEvent(event) {
 }
 
 function buildSystemPrompt() {
+  const formattingGuidelines = [
+    '請以溫暖、親切的語氣協助使用者，適度使用貼切的 emoji。',
+    '將不同主題拆成段落，段落與段落之間留空行。',
+    '段落可加入「【標題】」或 emoji 作為開頭，幫助快速理解。',
+    '詳細資訊以列點呈現，列點統一使用「• 」開頭，每點 1 至 2 句。',
+    '最後提供下一步行動建議或聯絡方式，並邀請使用者持續提問。'
+  ].join('\n');
+
   return [
     systemInstruction,
     '',
     '以下是客服人員必備的參考資料，回覆時請根據內容提供精準、同理的答案：',
     knowledgeContext,
+    '',
+    '回覆格式要求：',
+    formattingGuidelines,
   ].join('\n');
+}
+
+function formatReplyText(rawText) {
+  if (!rawText) {
+    return '';
+  }
+
+  let formatted = rawText.trim().replace(/\r\n/g, '\n');
+
+  // Normalize excessive blank lines
+  formatted = formatted.replace(/\n{3,}/g, '\n\n');
+
+  // Ensure headings like 【標題】 start on new lines
+  formatted = formatted.replace(/(?!^)(【[^】]+】)/g, '\n\n$1');
+
+  // Convert common bullet styles to unified bullet
+  formatted = formatted.replace(/^\s*[-*]\s+/gm, '• ');
+  formatted = formatted.replace(/^\s*•\s*/gm, '• ');
+
+  // Insert blank line between bullet blocks and following text
+  formatted = formatted.replace(/(• .+)(?=\n(?!\n|•))/g, '$1\n');
+
+  // Add extra spacing for sentences without list markers
+  formatted = formatted.replace(/([^.\n])\n(?!\n|•|【)/g, '$1\n\n');
+
+  return formatted.trim();
 }
 
 async function callGemini(prompt) {
@@ -211,6 +248,10 @@ async function callGemini(prompt) {
     const text = response.text();
 
     if (text) {
+      const formatted = formatReplyText(text);
+      if (formatted) {
+        return formatted;
+      }
       return text.trim();
     }
 
