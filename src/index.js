@@ -283,9 +283,18 @@ async function handleEvent(event) {
   // --- 4. 處理「觀看上課實況」 ---
   if (userText === '觀看上課實況') {
     replyMsg = {
-      type: 'video',
-      originalContentUrl: classVideoUrl,
-      previewImageUrl: classVideoThumbnailUrl
+      type: 'template',
+      altText: '觀看 OiKid 上課實況影片',
+      template: {
+        type: 'buttons',
+        title: '觀看上課實況',
+        text: '立即觀看 OiKid 上課實況影片，感受孩子線上互動學習的模樣。',
+        actions: [
+          { type: 'uri', label: '開啟影片', uri: classVideoUrl },
+          { type: 'message', label: '依年齡選課', text: '依年齡選課' },
+          { type: 'message', label: '為什麼選 OiKid？', text: '為什麼選 OiKid' }
+        ]
+      }
     };
     await client.replyMessage(event.replyToken, replyMsg);
     return;
