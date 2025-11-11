@@ -2,7 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const { Client, middleware } = require('@line/bot-sdk');
-const axios = require('axios');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const lineConfig = {
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
@@ -20,7 +21,6 @@ if (!geminiApiKey) {
 }
 
 const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-const geminiApiUrl = `https://generativelanguage.googleapis.com/v1/models/${geminiModel}:generateContent`;
 const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
 
 const client = new Client(lineConfig);
@@ -118,6 +118,9 @@ function buildKnowledgeContext() {
 
 const knowledgeContext = buildKnowledgeContext();
 
+const genAI = new GoogleGenerativeAI(geminiApiKey);
+global.fetch = global.fetch || fetch;
+
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
@@ -187,38 +190,39 @@ function buildSystemPrompt() {
 }
 
 async function callGemini(prompt) {
-  const payload = {
-    system_instruction: {
-      role: 'system',
-      parts: [{ text: buildSystemPrompt() }],
-    },
-    contents: [
+  try {
+    const model = genAI.getGenerativeModel({
+      model: geminiModel,
+      systemInstruction: buildSystemPrompt(),
+    });
+
+    const history = [
       {
         role: 'user',
         parts: [{ text: `客戶提問：${prompt}` }],
       },
-    ],
-  };
+    ];
 
-  const response = await axios.post(
-    `${geminiApiUrl}?key=${geminiApiKey}`,
-    payload,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+    const result = await model.generateContent({
+      contents: history,
+    });
 
-  const candidates = response.data?.candidates || [];
-  for (const candidate of candidates) {
-    const textPart = candidate?.content?.parts?.find((part) => typeof part?.text === 'string');
-    if (textPart?.text) {
-      return textPart.text.trim();
+    const response = await result.response;
+    const text = response.text();
+
+    if (text) {
+      return text.trim();
     }
+
+    console.error('Gemini SDK returned empty response.');
+    return null;
+  } catch (error) {
+    console.error('Error calling Gemini SDK:', error);
+    if (error?.response?.data) {
+      console.error('Gemini API Error Details:', error.response.data);
+    }
+    return null;
   }
-
-  return null;
 }
 
 const port = process.env.PORT || 3000;
