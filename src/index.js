@@ -179,7 +179,7 @@ async function handleEvent(event) {
 
 async function callGemini(prompt) {
   const payload = {
-    systemInstruction: {
+    system_instruction: {
       role: 'system',
       parts: [{ text: systemInstruction }],
     },
