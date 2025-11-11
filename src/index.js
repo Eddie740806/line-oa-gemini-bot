@@ -1,3 +1,8 @@
+//=================================================================
+// 【請將 src/index.js 的內容完整替換為以下程式碼】
+// (版本 v8：無圖片、無體驗課連結)
+//=================================================================
+
 require('dotenv').config();
 
 const express = require('express');
@@ -5,32 +10,25 @@ const { Client, middleware } = require('@line/bot-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
+// 1. LINE 憑證檢查
 const lineConfig = {
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.LINE_CHANNEL_SECRET,
 };
-
 if (!lineConfig.channelAccessToken || !lineConfig.channelSecret) {
-  throw new Error('Missing LINE channel credentials. Please set LINE_CHANNEL_ACCESS_TOKEN and LINE_CHANNEL_SECRET.');
+  throw new Error('Missing LINE channel credentials.');
 }
 
+// 2. Gemini API 憑證檢查
 const geminiApiKey = process.env.GEMINI_API_KEY;
-
 if (!geminiApiKey) {
-  throw new Error('Missing Gemini API key. Please set GEMINI_API_KEY.');
+  throw new Error('Missing Gemini API key.');
 }
 
 const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
 
-const client = new Client(lineConfig);
-const app = express();
-
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
-
+// 3. 知識庫 (Knowledge Base)
 const knowledgeBase = [
   {
     heading: '聯絡資訊與服務時間',
@@ -118,8 +116,23 @@ function buildKnowledgeContext() {
 
 const knowledgeContext = buildKnowledgeContext();
 
+// 4. v8 版 - 素材與腳本變數
+const caseySalesLink = 'https://preview--learn-abc-playfully.lovable.app/casey';
+const classVideoUrl = 'http://www.youtube.com/watch?v=rHEO487EiXA';
+const classVideoThumbnailUrl = 'https://img.youtube.com/vi/rHEO487EiXA/hqdefault.jpg';
+
+const ageGroupContent = {
+  "3-5歲": `🌱 3-5歲 啟蒙黃金期\n💡 建議從雙語教師開始，降低語言焦慮\n\n建議級別：Level 1, Level 2\n學習重點：\n• 自然發音\n• 基礎單字\n• 遊戲互動\n\n💬 Casey 的貼心提醒：\n這個階段最重要的是「讓孩子喜歡」，不用急著要成效。我建議先用雙語老師建立信心，等孩子敢開口後再轉外師。`,
+  "6-8歲": `📚 6-8歲 建立基礎期\n💡 雙軌並行，精品課+摩天輪課擴展視野\n\n建議級別：Level 2, Level 3, Level 4\n學習重點：\n• 句型應用\n• 閱讀理解\n• 日常會話\n\n💬 Casey 的貼心提醒：\n這年紀的孩子開始有學校課業壓力，我會協助您平衡OiKID課程與學校進度，讓孩子學得輕鬆又能應付考試。`,
+  "9-12歲": `🚀 9-12歲 能力躍升期\n💡 外師為主，加強口說與思辨能力\n\n建議級別：Level 5, Level 6, Level 7\n學習重點：\n• 流利對話\n• 文章寫作\n• 主題討論\n\n💬 Casey 的貼心提醒：\n高年級孩子需要更多挑戰，我會推薦辯論課、文法課，為國中英文打好基礎，也培養國際觀。`,
+  "13-15歲": `🎯 13-15歲 精進專業期\n💡 學術英語與專業主題，培養國際競爭力\n\n建議級別：Level 7, Level 8\n學習重點：\n• 學術寫作\n• 專業簡報\n• 深度辯論\n\n💬 Casey 的貼心提醒：\n國高中階段的孩子需要更專業的訓練，我會協助規劃學測、多益準備課程，同時加強學術英文能力，為未來升學或留學做準備。`
+};
+
+// 5. 初始化 LINE / Gemini / Express
+const client = new Client(lineConfig);
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 global.fetch = global.fetch || fetch;
+const app = express();
 
 app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'ok' });
@@ -127,12 +140,10 @@ app.get('/healthz', (req, res) => {
 
 app.post('/webhook', middleware(lineConfig), async (req, res) => {
   const events = Array.isArray(req.body?.events) ? req.body.events : [];
-
   if (events.length === 0) {
     res.status(200).end();
     return;
   }
-
   await Promise.all(
     events.map(async (event) => {
       try {
@@ -142,10 +153,10 @@ app.post('/webhook', middleware(lineConfig), async (req, res) => {
       }
     })
   );
-
   res.status(200).end();
 });
 
+// 6. v8 版 - 核心事件處理器 (handleEvent)
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return;
@@ -156,12 +167,171 @@ async function handleEvent(event) {
     replyToken === '00000000000000000000000000000000' ||
     replyToken === 'ffffffffffffffffffffffffffffffff'
   ) {
-    // LINE 用於 verify/ping 的測試事件，僅需回傳 200 不須回覆訊息
     return;
   }
 
   const userText = event.message.text.trim();
+  let replyMsg;
 
+  // --- 1. 處理「你好」或「主選單」 ---
+  if (
+    userText.includes('你好') ||
+    userText.includes('Hello') ||
+    userText.toLowerCase() === 'menu' ||
+    userText === '主選單'
+  ) {
+    replyMsg = {
+      type: 'template',
+      altText: '您好！我是 OiKID 線上客服助理。',
+      template: {
+        type: 'buttons',
+        title: '您好！我是 OiKID 24h 線上客服助理',
+        text: '很高興能為您服務，請問您想了解什麼呢？',
+        actions: [
+          { type: 'message', label: '依年齡選課 (推薦)', text: '依年齡選課' },
+          { type: 'message', label: '為什麼選 OiKid？', text: '為什麼選 OiKid' },
+          { type: 'message', label: '師資團隊介紹', text: '師資團隊介紹' },
+          { type: 'message', label: '觀看上課實況 (影片)', text: '觀看上課實況' }
+        ]
+      }
+    };
+    await client.replyMessage(event.replyToken, replyMsg);
+    return;
+  }
+
+  // --- 2. 處理「依年齡選課」 ---
+  if (
+    userText === '依年齡選課' ||
+    userText.toLowerCase().includes('price') ||
+    userText.includes('多少錢')
+  ) {
+    replyMsg = {
+      type: 'text',
+      text:
+        '好的！OiKid 的課程是為 3-15 歲孩子設計的。\n為了提供您最準確的資訊，請問您孩子的年齡是？',
+      quickReply: {
+        items: [
+          {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: '3-5歲 (啟蒙黃金期)',
+              text: '我想了解 3-5歲'
+            }
+          },
+          {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: '6-8歲 (建立基礎期)',
+              text: '我想了解 6-8歲'
+            }
+          },
+          {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: '9-12歲 (能力躍升期)',
+              text: '我想了解 9-12歲'
+            }
+          },
+          {
+            type: 'action',
+            action: {
+              type: 'message',
+              label: '13-15歲 (精進專業期)',
+              text: '我想了解 13-15歲'
+            }
+          }
+        ]
+      }
+    };
+    await client.replyMessage(event.replyToken, replyMsg);
+    return;
+  }
+
+  // --- 3. 處理「我想了解...歲」 ---
+  if (userText.startsWith('我想了解 ')) {
+    const ageKey = userText.replace('我想了解 ', '').trim();
+    const scriptedReply = ageGroupContent[ageKey];
+
+    if (scriptedReply) {
+      const msg1 = { type: 'text', text: scriptedReply };
+      const msg2 = {
+        type: 'text',
+        text:
+          `想知道 Casey 顧問如何為這年紀的孩子打造專屬學習路徑嗎？\n歡迎查看詳細介紹： ${caseySalesLink}`,
+        quickReply: {
+          items: [
+            {
+              type: 'action',
+              action: {
+                type: 'message',
+                label: '觀看上課實況 (影片)',
+                text: '觀看上課實況'
+              }
+            },
+            { type: 'action', action: { type: 'message', label: '師資團隊介紹', text: '師資團隊介紹' } }
+          ]
+        }
+      };
+      await client.replyMessage(event.replyToken, [msg1, msg2]);
+      return;
+    }
+  }
+
+  // --- 4. 處理「觀看上課實況」 ---
+  if (userText === '觀看上課實況') {
+    replyMsg = {
+      type: 'video',
+      originalContentUrl: classVideoUrl,
+      previewImageUrl: classVideoThumbnailUrl
+    };
+    await client.replyMessage(event.replyToken, replyMsg);
+    return;
+  }
+
+  // --- 5. 處理「為什麼選 OiKid」 ---
+  if (userText === '為什麼選 OiKid') {
+    replyMsg = {
+      type: 'template',
+      altText: '為什麼要選擇 OiKid？',
+      template: {
+        type: 'buttons',
+        title: '為什麼選擇 OiKid？',
+        text: '我們有四大核心優勢，您可以點擊下方按鈕，由 AI 助理為您說明：',
+        actions: [
+          { type: 'message', label: '360° 學習體驗', text: '我想了解 360 學習體驗' },
+          { type: 'message', label: '獨家教材特色', text: '我想了解教材特色' },
+          { type: 'message', label: '獨家技術加持', text: '我想了解 OiKid 技術' },
+          { type: 'message', label: '真實服務成效', text: '我想看家長見證' }
+        ]
+      }
+    };
+    await client.replyMessage(event.replyToken, replyMsg);
+    return;
+  }
+
+  // --- 6. 處理「師資團隊介紹」 ---
+  if (userText === '師資團隊介紹') {
+    replyMsg = {
+      type: 'template',
+      altText: 'OiKid 師資團隊介紹',
+      template: {
+        type: 'buttons',
+        title: 'OiKid 師資團隊',
+        text: '我們的師資分為「專業外師」與「貼心雙語教師」，您想先了解哪一個？',
+        actions: [
+          { type: 'message', label: '我想了解外師', text: '我想了解外師' },
+          { type: 'message', label: '我想了解雙語中師', text: '我想了解雙語中師' }
+        ]
+      }
+    };
+    await client.replyMessage(event.replyToken, replyMsg);
+    return;
+  }
+
+  // --- Fallback: 呼叫 Gemini
   let replyText;
   try {
     replyText = await callGemini(userText);
@@ -176,37 +346,33 @@ async function handleEvent(event) {
 
   await client.replyMessage(event.replyToken, {
     type: 'text',
-    text: replyText,
+    text: replyText
   });
 }
 
+// 7. v8 版 - AI 後援提示 (buildSystemPrompt)
 function buildSystemPrompt() {
   const conversationRules = [
-    '**【極重要】對話邏輯規則（你必須嚴格遵守）：**',
-    '1. 【嚴禁洗版】：你的回覆**必須**精簡在「一個」回覆訊息中。你**絕對不能**一次性回覆所有知識庫內容，或將一個答案拆成多則訊息連續傳送。',
-    '',
-    '2. 【處理問候語與引導】：',
-    '   - 如果用戶的訊息是「你好」、「Hello」或類似的**單純問候**，你**必須**回覆「問候語 + 服務項目引導」。',
-    '   - **問候語：** 「您好！我是 OiKID 24h 線上客服助理。很高興能為您服務。」',
-    '   - **服務項目引導：** 接著，你**必須立刻**附加 3-4 個用戶最可能想問的「服務項目」範例，引導他們提問。',
-    '   - **範例格式 (必須包含換行)：**',
-    '     「您可以試著問我：',
-    '     • 方案與費用',
-    '     • 如何預約課程',
-    '     • 師資介紹」',
-    '   - **(絕對禁止)：** 在回覆問候語時，**嚴禁**主動附加任何知識庫的**完整答案**。',
-    '',
-    '3. 【只答所問】：當用戶提出**具體問題**時（例如「退費機制」），你必須**只回答**該問題的答案。不要主動提供用戶沒有問的額外資訊。'
+    '**【AI 規則】（你是一個 AI 後援，只在腳本無法處理時才會被呼叫）：**',
+    '1. 【嚴禁洗版】：你的回覆**必須**精簡在「一個」回覆訊息中。',
+    '2. 【只答所問】：你必須**只回答**用戶当前提出的**具體問題**（例如「退費機制」、「如何取消課程」、「我想了解外師」）。',
+    '3. 【嚴禁引導】：**絕對禁止**主動提供「您可以試著問我...」之類的引導，因為那是主要腳本的工作。你只需回答問題。'
   ].join('\n');
 
   const formattingRules = [
-    '**【極重要】排版規則（你必須嚴格遵守）：**',
-    '1. 【目標介面】：你的回覆將顯示在「手機 LINE」的聊天視窗中。這個視窗非常窄，因此**嚴禁回覆任何擠在一起的長篇文字**。',
-    '2. 【強制換行】：在回答時，每個句子、每個要點、或段落之間，**必須**使用「換行符」(\\n) 進行分隔，確保內容清晰易讀。',
-    '3. 【強制列表化】：當答案包含多個項目時（例如：方案內容、退費規定、聯絡方式、步驟說明），**絕對必須**使用「項目符號列表」來呈現。',
-    '   - **LINE 友好格式範例 (使用 • 或 -)：**',
-    '     • 項目一：說明...',
-    '     • 項目二：說明...'
+    '**【排版規則】（你必須嚴格遵守）：**',
+    '1. 【目標介面】：你的回覆將顯示在「手機 LINE」的聊天視窗中。因此**嚴禁回覆任何擠在一起的長篇文字**。',
+    '2. 【強制換行】：在回答時，每個句子、每個要點、或段落之間，**必須**使用「換行符」(\n) 進行分隔。',
+    '3. 【強制列表化】：當答案包含多個項目時（例如：退費規定、聯絡方式），**絕對必須**使用「項目符號列表」來呈現。',
+    '4. 【友善包裝 (極重要)】：**絕對禁止**只回傳生硬的條目！你必須用「友善且完整的句子」來包裝你的答案。',
+    '   - **(錯誤 ❌)：**',
+    '     • 課程開始前 24 小時可免費取消',
+    '     • 逾時視同上課',
+    '   - **(正確 ✅)：**',
+    '     「您好，關於取消課程的規定如下：',
+    '     • 課程開始前 24 小時可免費取消。',
+    '     • 若逾時取消，將視同上課並扣除堂數喔。」',
+    '5. 【語氣】：保持專業、友善、有同理心。'
   ].join('\n');
 
   return [
@@ -224,61 +390,31 @@ function buildSystemPrompt() {
   ].join('\n');
 }
 
-function formatReplyText(rawText) {
-  if (!rawText) {
-    return '';
-  }
-
-  let formatted = rawText.trim().replace(/\r\n/g, '\n');
-
-  // Normalize excessive blank lines
-  formatted = formatted.replace(/\n{3,}/g, '\n\n');
-
-  // Ensure headings like 【標題】 start on new lines
-  formatted = formatted.replace(/(?!^)(【[^】]+】)/g, '\n\n$1');
-
-  // Convert common bullet styles to unified bullet
-  formatted = formatted.replace(/^\s*[-*]\s+/gm, '• ');
-  formatted = formatted.replace(/^\s*•\s*/gm, '• ');
-
-  // Insert blank line between bullet blocks and following text
-  formatted = formatted.replace(/(• .+)(?=\n(?!\n|•))/g, '$1\n');
-
-  // Add extra spacing for sentences without list markers
-  formatted = formatted.replace(/([^.\n])\n(?!\n|•|【)/g, '$1\n\n');
-
-  return formatted.trim();
-}
-
+// 8. v8 版 - AI 核心呼叫 (callGemini)
 async function callGemini(prompt) {
   try {
     const model = genAI.getGenerativeModel({
       model: geminiModel,
-      systemInstruction: buildSystemPrompt(),
+      systemInstruction: buildSystemPrompt()
     });
 
     const history = [
       {
         role: 'user',
-        parts: [{ text: `客戶提問：${prompt}` }],
-      },
+        parts: [{ text: `客戶提問：${prompt}` }]
+      }
     ];
 
     const result = await model.generateContent({
-      contents: history,
+      contents: history
     });
 
     const response = await result.response;
     const text = response.text();
 
     if (text) {
-      const formatted = formatReplyText(text);
-      if (formatted) {
-        return formatted;
-      }
       return text.trim();
     }
-
     console.error('Gemini SDK returned empty response.');
     return null;
   } catch (error) {
@@ -290,9 +426,14 @@ async function callGemini(prompt) {
   }
 }
 
+// 9. 啟動伺服器
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`LINE bot server is running on port ${port}`);
 });
+
+//=================================================================
+// 【程式碼結束】
+//=================================================================
 
 
