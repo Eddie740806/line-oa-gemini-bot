@@ -19,7 +19,7 @@ if (!geminiApiKey) {
   throw new Error('Missing Gemini API key. Please set GEMINI_API_KEY.');
 }
 
-const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-001';
+const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const geminiApiUrl = `https://generativelanguage.googleapis.com/v1/models/${geminiModel}:generateContent`;
 const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
 
@@ -177,22 +177,19 @@ async function handleEvent(event) {
   });
 }
 
-function buildSystemPrompt() {
-  return [
+async function callGemini(prompt) {
+  const systemPromptText = [
     systemInstruction,
     '',
     '以下是客服人員必備的參考資料，回覆時請根據內容提供精準、同理的答案：',
     knowledgeContext,
   ].join('\n');
-}
 
-async function callGemini(prompt) {
   const payload = {
+    systemInstruction: {
+      parts: [{ text: systemPromptText }],
+    },
     contents: [
-      {
-        role: 'system',
-        parts: [{ text: buildSystemPrompt() }],
-      },
       {
         role: 'user',
         parts: [{ text: `客戶提問：${prompt}` }],
