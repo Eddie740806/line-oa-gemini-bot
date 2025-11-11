@@ -177,18 +177,18 @@ async function handleEvent(event) {
   });
 }
 
-async function callGemini(prompt) {
-  const systemPromptText = [
+function buildSystemPrompt() {
+  return [
     systemInstruction,
     '',
     '以下是客服人員必備的參考資料，回覆時請根據內容提供精準、同理的答案：',
     knowledgeContext,
   ].join('\n');
+}
 
+async function callGemini(prompt) {
   const payload = {
-    systemInstruction: {
-      parts: [{ text: systemPromptText }],
-    },
+    systemInstruction: buildSystemPrompt(),
     contents: [
       {
         role: 'user',
