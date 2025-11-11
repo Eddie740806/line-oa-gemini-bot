@@ -20,7 +20,7 @@ if (!geminiApiKey) {
 }
 
 const geminiModel = process.env.GEMINI_MODEL || 'gemini-pro';
-const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent`;
+const geminiApiUrl = `https://generativelanguage.googleapis.com/v1/models/${geminiModel}:generateContent`;
 const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
 
 const client = new Client(lineConfig);
