@@ -188,7 +188,10 @@ function buildSystemPrompt() {
 
 async function callGemini(prompt) {
   const payload = {
-    systemInstruction: buildSystemPrompt(),
+    system_instruction: {
+      role: 'system',
+      parts: [{ text: buildSystemPrompt() }],
+    },
     contents: [
       {
         role: 'user',
