@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "type": "1-on-1",
+    "persona": "焦慮媽媽",
+    "input": "請問我家小孩今年五歲，完全沒基礎，這樣適合你們的課嗎？會不會跟不上？",
+    "expected_intent": "詢問適合年齡"
+  },
+  {
+    "id": 2,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "你們的學費怎麼算啊？有沒有什麼優惠方案，給我最便宜的就好。",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 3,
+    "type": "group_mention",
+    "persona": "阿公阿嬤",
+    "input": "@OiKID 請問那個試聽課怎麼預約？我不太會用手機。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 4,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "你們最晚可以幾點上課？我小孩下課都八點了。",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 5,
+    "type": "1-on-1",
+    "persona": "懷疑論者",
+    "input": "線上學英文真的有效嗎？感覺小孩會分心吧。",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 6,
+    "type": "1-on-1",
+    "persona": "新手家長",
+    "input": "想幫寶寶找英文課，幾歲開始學比較好啊？",
+    "expected_intent": "詢問適合年齡"
+  },
+  {
+    "id": 7,
+    "type": "group_mention",
+    "persona": "價格敏感爸爸",
+    "input": "@機器人 你們最近有沒有什麼折扣碼可以領？團購可以更便宜嗎？",
+    "expected_intent": "詢問優惠活動"
+  },
+  {
+    "id": 8,
+    "type": "1-on-1",
+    "persona": "重視師資家長",
+    "input": "請問你們的老師是外籍老師嗎？有沒有證照？來自哪個國家？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 9,
+    "type": "1-on-1",
+    "persona": "多子女家庭家長",
+    "input": "我家有兩個小孩，可以共用一個方案嗎？還是要分開買？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 10,
+    "type": "1-on-1",
+    "persona": "想省錢家長",
+    "input": "你們有提供教材嗎？要另外買嗎？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 11,
+    "type": "1-on-1",
+    "persona": "抱怨經驗者",
+    "input": "小孩學了好久都沒進步，是不是你們的教學方式有問題啊？",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 12,
+    "type": "group_mention",
+    "persona": "急躁家長",
+    "input": "@OiKID 我要預約試聽，馬上！",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 13,
+    "type": "1-on-1",
+    "persona": "好奇路人",
+    "input": "你們這個OiKID是賣什麼的？",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 14,
+    "type": "1-on-1",
+    "persona": "科技白痴家長",
+    "input": "我電腦不太會用，平板可以上課嗎？需要下載什麼程式？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 15,
+    "type": "1-on-1",
+    "persona": "教育理念堅持者",
+    "input": "你們的課程有沒有符合CEFR標準？是走自然發音還是KK音標？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 16,
+    "type": "group_mention",
+    "persona": "焦慮媽媽",
+    "input": "@機器人 我家小孩很害羞，一對一會不會很尷尬啊？老師會不會引導？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 17,
+    "type": "1-on-1",
+    "persona": "重視發音家長",
+    "input": "老師的口音純正嗎？會不會有很重的腔調？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 18,
+    "type": "1-on-1",
+    "persona": "考慮轉學家長",
+    "input": "我小孩之前在其他平台學，效果不佳，你們有什麼不一樣的地方嗎？",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 19,
+    "type": "1-on-1",
+    "persona": "舊生家長",
+    "input": "我之前買的課快上完了，想再續約，有什麼優惠嗎？",
+    "expected_intent": "詢問優惠活動"
+  },
+  {
+    "id": 20,
+    "type": "1-on-1",
+    "persona": "海外家長",
+    "input": "我們住美國，時差問題怎麼辦？可以上你們的課嗎？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 21,
+    "type": "group_mention",
+    "persona": "非目標客群",
+    "input": "@OiKID 你們有賣兒童英文故事書嗎？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 22,
+    "type": "1-on-1",
+    "persona": "重視互動家長",
+    "input": "老師上課會很活潑嗎？還是只是一直講課？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 23,
+    "type": "1-on-1",
+    "persona": "想了解更多",
+    "input": "我想了解一下 OiKID 的詳細課程內容。",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 24,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "你們的退費機制是怎麼樣？如果上了一半不想上，可以退錢嗎？",
+    "expected_intent": "詢問退費政策"
+  },
+  {
+    "id": 25,
+    "type": "1-on-1",
+    "persona": "急躁家長",
+    "input": "我下週就要出國，今天可以預約試聽嗎？",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 26,
+    "type": "group_mention",
+    "persona": "阿公阿嬤",
+    "input": "@機器人 我孫女今年中班，那個試聽要怎麼弄？要準備什麼？",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 27,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "如果臨時有事不能上課，可以請假或調課嗎？怎麼操作？",
+    "expected_intent": "取消/改課"
+  },
+  {
+    "id": 28,
+    "type": "1-on-1",
+    "persona": "懷疑論者",
+    "input": "網路上很多負評耶，你們怎麼解釋？",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 29,
+    "type": "1-on-1",
+    "persona": "抱怨經驗者",
+    "input": "我上次體驗課的老師很不專業，講話都不看鏡頭。",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 30,
+    "type": "1-on-1",
+    "persona": "想了解更多",
+    "input": "有沒有針對學齡前兒童的課程？",
+    "expected_intent": "詢問適合年齡"
+  },
+  {
+    "id": 31,
+    "type": "group_mention",
+    "persona": "重視證照家長",
+    "input": "@OiKID 老師有TESOL或TEFL證照嗎？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 32,
+    "type": "1-on-1",
+    "persona": "推薦者",
+    "input": "朋友推薦OiKID，我想幫我小孩報名。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 33,
+    "type": "1-on-1",
+    "persona": "非目標客群",
+    "input": "你們有沒有成人英文課程啊？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 34,
+    "type": "1-on-1",
+    "persona": "科技白痴家長",
+    "input": "網路不穩會影響上課嗎？怎麼測試網路速度？",
+    "expected_intent": "技術支援"
+  },
+  {
+    "id": 35,
+    "type": "1-on-1",
+    "persona": "教育理念堅持者",
+    "input": "你們的教材是不是都以遊戲為主？會不會太偏重玩樂而忽略學習效果？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 36,
+    "type": "group_mention",
+    "persona": "焦慮媽媽",
+    "input": "@機器人 請問體驗課可以上多久？是免費的嗎？",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 37,
+    "type": "1-on-1",
+    "persona": "舊生家長",
+    "input": "我的課程還剩幾堂？怎麼查？",
+    "expected_intent": "查詢訂單/課程"
+  },
+  {
+    "id": 38,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "有沒有分期付款的選項？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 39,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "我可以指定老師嗎？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 40,
+    "type": "1-on-1",
+    "persona": "急躁家長",
+    "input": "我要立刻預約，請給我專人服務。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 41,
+    "type": "group_mention",
+    "persona": "好奇路人",
+    "input": "@OiKID 嗨！你們是線上英文教學對嗎？",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 42,
+    "type": "1-on-1",
+    "persona": "多子女家庭家長",
+    "input": "我家老大想學，老二還太小，你們有嬰幼兒英文課嗎？",
+    "expected_intent": "詢問適合年齡"
+  },
+  {
+    "id": 43,
+    "type": "1-on-1",
+    "persona": "懷疑論者",
+    "input": "你們說的一對一教學是真的嗎？會不會有其他小孩在旁邊？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 44,
+    "type": "1-on-1",
+    "persona": "科技白痴家長",
+    "input": "我忘記我的帳號密碼了，怎麼辦？",
+    "expected_intent": "技術支援"
+  },
+  {
+    "id": 45,
+    "type": "1-on-1",
+    "persona": "抱怨經驗者",
+    "input": "老師常常遲到，這樣很不尊重學生耶！",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 46,
+    "type": "group_mention",
+    "persona": "非目標客群",
+    "input": "@機器人 你們徵不徵英文老師啊？我有教學經驗。",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 47,
+    "type": "1-on-1",
+    "persona": "重視發音家長",
+    "input": "你們有沒有針對自然發音的課程？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 48,
+    "type": "1-on-1",
+    "persona": "阿公阿嬤",
+    "input": "那個OiKID怎麼發音啊？我每次都唸錯。",
+    "expected_intent": "其他/閒聊"
+  },
+  {
+    "id": 49,
+    "type": "1-on-1",
+    "persona": "想了解更多",
+    "input": "除了英文，你們還有其他語言課程嗎？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 50,
+    "type": "1-on-1",
+    "persona": "焦慮媽媽",
+    "input": "小孩的學習狀況會被記錄下來嗎？我怎麼知道他有沒有進步？",
+    "expected_intent": "查詢訂單/課程"
+  },
+  {
+    "id": 51,
+    "type": "group_mention",
+    "persona": "價格敏感爸爸",
+    "input": "@OiKID 試聽課後會不會一直推銷？我很討厭被推銷。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 52,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "我有個國小三年級的小孩，他英文程度中等，有推薦的級別嗎？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 53,
+    "type": "1-on-1",
+    "persona": "教育理念堅持者",
+    "input": "你們有提供學習報告或進度追蹤嗎？",
+    "expected_intent": "查詢訂單/課程"
+  },
+  {
+    "id": 54,
+    "type": "1-on-1",
+    "persona": "推薦者",
+    "input": "請問有推薦碼可以使用嗎？",
+    "expected_intent": "詢問優惠活動"
+  },
+  {
+    "id": 55,
+    "type": "1-on-1",
+    "persona": "舊生家長",
+    "input": "我上次上課遇到技術問題，螢幕一直卡住，怎麼辦？",
+    "expected_intent": "技術支援"
+  },
+  {
+    "id": 56,
+    "type": "group_mention",
+    "persona": "急躁家長",
+    "input": "@機器人 我的課是明天早上九點，我想改到下午可以嗎？快點回我！",
+    "expected_intent": "取消/改課"
+  },
+  {
+    "id": 57,
+    "type": "1-on-1",
+    "persona": "懷疑論者",
+    "input": "你們的師資介紹是不是都是假的啊？照片跟本人會一樣嗎？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 58,
+    "type": "1-on-1",
+    "persona": "抱怨經驗者",
+    "input": "客服態度很差耶，打電話都沒人接。",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 59,
+    "type": "1-on-1",
+    "persona": "阿公阿嬤",
+    "input": "我孫子今年國小一年級，他很愛玩遊戲，你們上課會有很多遊戲嗎？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 60,
+    "type": "1-on-1",
+    "persona": "非目標客群",
+    "input": "OiKID是哪家公司旗下的啊？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 61,
+    "type": "group_mention",
+    "persona": "焦慮媽媽",
+    "input": "@OiKID 小孩如果不敢開口說，老師會怎麼引導？我好擔心。",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 62,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "有沒有一次繳清比較便宜的方案？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 63,
+    "type": "1-on-1",
+    "persona": "多子女家庭家長",
+    "input": "我可以幫兩個小孩同時排課嗎？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 64,
+    "type": "1-on-1",
+    "persona": "新手家長",
+    "input": "你們有提供免費的英文學習資源嗎？",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 65,
+    "type": "1-on-1",
+    "persona": "重視互動家長",
+    "input": "上課時家長可以陪同嗎？還是要讓小孩自己上？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 66,
+    "type": "group_mention",
+    "persona": "懷疑論者",
+    "input": "@機器人 請問你們跟其他線上英文平台有什麼不同？價格有比較貴嗎？",
+    "expected_intent": "想了解更多"
+  },
+  {
+    "id": 67,
+    "type": "1-on-1",
+    "persona": "舊生家長",
+    "input": "我上次幫小孩選的老師他很不喜歡，可以換老師嗎？",
+    "expected_intent": "取消/改課"
+  },
+  {
+    "id": 68,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "你們客服的服務時間是幾點到幾點？",
+    "expected_intent": "詢問客服時間/聯絡方式"
+  },
+  {
+    "id": 69,
+    "type": "1-on-1",
+    "persona": "想了解更多",
+    "input": "有推薦的老師嗎？最好是比較有經驗的。",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 70,
+    "type": "1-on-1",
+    "persona": "急躁家長",
+    "input": "現在能馬上幫我安排一個試聽課嗎？越快越好。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 71,
+    "type": "group_mention",
+    "persona": "抱怨經驗者",
+    "input": "@OiKID 我小孩因為沒跟上進度被老師罵哭！你們老師是怎麼回事？",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 72,
+    "type": "1-on-1",
+    "persona": "非目標客群",
+    "input": "你們有開親子英文共學班嗎？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 73,
+    "type": "1-on-1",
+    "persona": "重視發音家長",
+    "input": "請問老師會糾正發音嗎？還是只是聽小孩說？",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 74,
+    "type": "1-on-1",
+    "persona": "阿公阿嬤",
+    "input": "我不太懂什麼是『線上學習』，是不是跟視訊電話一樣？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 75,
+    "type": "1-on-1",
+    "persona": "推薦者",
+    "input": "朋友說你們的課程很棒，我想預約。",
+    "expected_intent": "預約體驗/試聽"
+  },
+  {
+    "id": 76,
+    "type": "group_mention",
+    "persona": "焦慮媽媽",
+    "input": "@機器人 小孩上課沒專心怎麼辦？你們有什麼辦法嗎？",
+    "expected_intent": "家長教學技巧"
+  },
+  {
+    "id": 77,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "繳費後可不可以拿收據報稅？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 78,
+    "type": "1-on-1",
+    "persona": "教育理念堅持者",
+    "input": "你們的課程有沒有涵蓋Phonics？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 79,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "我的小孩有ADHD，你們有針對特殊兒童的教學方式嗎？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 80,
+    "type": "1-on-1",
+    "persona": "舊生家長",
+    "input": "幫我把下週三晚上的課取消，謝謝。",
+    "expected_intent": "取消/改課"
+  },
+  {
+    "id": 81,
+    "type": "group_mention",
+    "persona": "懷疑論者",
+    "input": "@OiKID 為什麼你們要一直打電話給我？試聽就試聽，沒興趣就不要煩我！",
+    "expected_intent": "抱怨/回饋"
+  },
+  {
+    "id": 82,
+    "type": "1-on-1",
+    "persona": "科技白痴家長",
+    "input": "我今天上課畫面都沒聲音，是不是我耳機壞掉了？",
+    "expected_intent": "技術支援"
+  },
+  {
+    "id": 83,
+    "type": "1-on-1",
+    "persona": "非目標客群",
+    "input": "你們這個OiKID可以幫我找外國家教嗎？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 84,
+    "type": "1-on-1",
+    "persona": "多子女家庭家長",
+    "input": "你們是不是有手足優惠方案？",
+    "expected_intent": "詢問優惠活動"
+  },
+  {
+    "id": 85,
+    "type": "1-on-1",
+    "persona": "想了解更多",
+    "input": "你們的APP好用嗎？跟網頁版有什麼差？",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 86,
+    "type": "group_mention",
+    "persona": "阿公阿嬤",
+    "input": "@機器人 我看我的孫子一直在看平板，這樣眼睛會不會壞掉？你們有說要怎麼保護眼睛嗎？",
+    "expected_intent": "家長教學技巧"
+  },
+  {
+    "id": 87,
+    "type": "1-on-1",
+    "persona": "焦慮媽媽",
+    "input": "小孩對英文完全沒興趣，怎麼辦？你們有什麼撇步嗎？",
+    "expected_intent": "家長教學技巧"
+  },
+  {
+    "id": 88,
+    "type": "1-on-1",
+    "persona": "價格敏感爸爸",
+    "input": "一堂課大概多少錢啊？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 89,
+    "type": "1-on-1",
+    "persona": "急躁家長",
+    "input": "我要報名！怎麼付錢？",
+    "expected_intent": "詢問價格/費用"
+  },
+  {
+    "id": 90,
+    "type": "1-on-1",
+    "persona": "懷疑論者",
+    "input": "你們的課是不是都是預錄好的？我看其他平台都是直播。",
+    "expected_intent": "詢問上課方式/軟硬體"
+  },
+  {
+    "id": 91,
+    "type": "group_mention",
+    "persona": "舊生家長",
+    "input": "@OiKID 我的課堂評價怎麼給？我找不到地方。",
+    "expected_intent": "查詢訂單/課程"
+  },
+  {
+    "id": 92,
+    "type": "1-on-1",
+    "persona": "教育理念堅持者",
+    "input": "請問你們的教學有沒有融入STEAM教育？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 93,
+    "type": "1-on-1",
+    "persona": "忙碌上班族媽媽",
+    "input": "我下週出差，需要暫停課程一個月，可以嗎？",
+    "expected_intent": "取消/改課"
+  },
+  {
+    "id": 94,
+    "type": "1-on-1",
+    "persona": "稱讚/感謝",
+    "input": "OiKID的老師教得真好，我家小孩很喜歡！謝謝你們。",
+    "expected_intent": "稱讚/感謝"
+  },
+  {
+    "id": 95,
+    "type": "1-on-1",
+    "persona": "非目標客群",
+    "input": "你們有提供實體教室嗎？",
+    "expected_intent": "非相關問題"
+  },
+  {
+    "id": 96,
+    "type": "group_mention",
+    "persona": "想了解更多",
+    "input": "@機器人 你們的課程會跟學校課綱銜接嗎？",
+    "expected_intent": "詢問課程內容/教材"
+  },
+  {
+    "id": 97,
+    "type": "1-on-1",
+    "persona": "焦慮媽媽",
+    "input": "小孩如果學了沒興趣，可以隨時停課嗎？會不會有違約金？",
+    "expected_intent": "詢問退費政策"
+  },
+  {
+    "id": 98,
+    "type": "1-on-1",
+    "persona": "阿公阿嬤",
+    "input": "那個視訊的時候，老師會不會很兇？我孫子會怕生。",
+    "expected_intent": "詢問師資"
+  },
+  {
+    "id": 99,
+    "type": "1-on-1",
+    "persona": "科技白痴家長",
+    "input": "我的平板更新了以後就打不開你們的app了，怎麼辦？",
+    "expected_intent": "技術支援"
+  },
+  {
+    "id": 100,
+    "type": "1-on-1",
+    "persona": "急躁家長",
+    "input": "我看到你們的廣告了，想幫我小孩報名課程！",
+    "expected_intent": "預約體驗/試聽"
+  }
+]

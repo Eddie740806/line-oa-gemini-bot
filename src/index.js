@@ -1,6 +1,5 @@
 //=================================================================
-// 【請將 src/index.js 的內容完整替換為以下程式碼】
-// (版本 v8：無圖片、無體驗課連結)
+// 【OiKID Line Bot v10.0 - Group Support & Warm Persona】
 //=================================================================
 
 require('dotenv').config();
@@ -8,6 +7,8 @@ require('dotenv').config();
 const express = require('express');
 const { Client, middleware } = require('@line/bot-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const fs = require('fs');
+const path = require('path');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 // 1. LINE 憑證檢查
@@ -25,82 +26,49 @@ if (!geminiApiKey) {
   throw new Error('Missing Gemini API key.');
 }
 
-const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-const systemInstruction = process.env.GEMINI_SYSTEM_PROMPT || 'You are OiKID 24h support assistant.';
+const geminiModel = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 
-// 3. 知識庫 (Knowledge Base)
+//=================================================================
+// 3. 知識庫 (Knowledge Base) - 擴充版
+//=================================================================
 const knowledgeBase = [
   {
-    heading: '聯絡資訊與服務時間',
+    heading: '品牌與課程特色',
     details: [
-      '客服電話：0800-010-920',
-      '服務時間：週一至週日 09:00–22:00（課程時段 09:00–22:30）',
-      '客服信箱：service@oikid.com.tw',
-      '合作洽詢：partnership@oikid.com.tw',
-      '繳費方式：信用卡、匯款、虛擬帳號'
+      'OiKID 是專為 3-15 歲設計的線上英語學習平台。',
+      '教材特色：參考美國 CCSS 與台灣 108 課綱，結合遊戲式教學，讓孩子愛上開口說。',
+      '課程形式：一對一精品課程 (25分鐘)、摩天輪團體課程 (1對4)、直播課。',
+      '學習流程：課前預習 (5-8分鐘影片) -> 課中互動 (25分鐘) -> 課後複習 (錄影回放/作業)。'
     ]
   },
   {
-    heading: '課程資訊',
+    heading: '師資團隊',
     details: [
-      '對象：3–15 歲孩童',
-      '課程長度：每堂 25 分鐘，一對一直播教學',
-      '時間安排：每週一中午 12:00 開放下一週預約',
-      '課程類型：一對一精品課程、摩天輪團體課程、主題體驗營',
-      '教材：依照美國 CCSS 與台灣 108 課綱分級，共 8 個等級'
+      '雙語師：具備幼教背景，適合零基礎或害羞的孩子，協助建立自信。',
+      '外籍師：來自美、加、英、澳、南非等母語國家，提供純正口音沉浸環境。',
+      '所有老師皆具備 TESOL/TEFL 專業教學證照，並通過嚴格審核。',
+      '家長可自由選擇老師，並查看老師自我介紹影片與評價。'
     ]
   },
   {
-    heading: '師資資訊',
+    heading: '費用與方案 (僅供參考，以顧問報價為準)',
     details: [
-      '所有外師具備專業教學證照或幼教背景',
-      '主要來自美國、加拿大、英國、澳洲、南非等以英語為母語國家',
-      '提供雙語中師協助課後複習與家長溝通'
+      '平均單堂費用：約 NT$380 - NT$450 (視方案與優惠而定)。',
+      '升級包：約 NT$62,400 (適合短期衝刺)。',
+      '勤學包：約 NT$91,200 (高CP值推薦)。',
+      '小拍檔/大拍檔：適合長期規劃或手足共用 (雙寶方案)。',
+      '付款方式：支援信用卡分期 (6/12/24期)、轉帳、無卡分期。',
+      '退費機制：未滿30天且使用少於一定堂數可退費 (依合約規定)，超過1/3堂數不予退費。'
     ]
   },
   {
-    heading: '方案與費用',
+    heading: '免費體驗課流程',
     details: [
-      '升級包：NT$62,400（124 堂課）',
-      '勤學包：NT$91,200（190 堂課）',
-      '小拍檔：NT$124,800（266 堂課）',
-      '大拍檔：NT$156,000（340 堂課）',
-      '提供 6、12、24 期分期付款，舊生續購享專屬優惠'
-    ]
-  },
-  {
-    heading: '預約與取消規定',
-    details: [
-      '課程需提前預約，建議至少 24 小時前安排',
-      '課程開始前 24 小時可免費取消，逾時視同上課並扣除堂數',
-      '遇系統或老師端因素取消，堂數自動退回'
-    ]
-  },
-  {
-    heading: '常見問題與技術支援',
-    details: [
-      '建議使用最新版本 Chrome 或 Firefox，確保良好體驗',
-      '若遇到畫面卡頓，請重新整理或重開電腦／App',
-      '課後可於家長專區下載錄影與作業單字卡',
-      '行動 App 支援 iOS、Android，需維持網路穩定'
-    ]
-  },
-  {
-    heading: '退費機制',
-    details: [
-      '課程無鑑賞期，購買後若需解約請聯繫客服',
-      '30 日內解約：已上堂數以每堂 NT$900 計算扣除，餘額退還',
-      '30 日後解約：除已上堂數外，加收合約總金額 30% 手續費',
-      '課程進度已超過三分之一，不再受理退費'
-    ]
-  },
-  {
-    heading: '家長常見反饋',
-    details: [
-      '班主任提供學習追蹤與課後提醒',
-      '每堂課提供錄影回放與複習教材',
-      '定期舉辦勤學排行榜與獎學金活動',
-      '家長可透過 LINE 官方帳號、客服電話即時諮詢'
+      '1. 填寫資料：留下稱呼、電話、方便聯絡時段。',
+      '2. 顧問諮詢：專業顧問會在您方便的時段致電，了解孩子程度與個性。',
+      '3. 安排課程：依需求安排最適合的「雙語」或「外師」體驗課。',
+      '4. 設備準備：使用電腦或平板 (需下載 OiKID App) 上課。',
+      '5. 正式體驗：25分鐘一對一互動教學，課後提供能力分析報告。'
     ]
   }
 ];
@@ -113,22 +81,35 @@ function buildKnowledgeContext() {
     )
     .join('\n\n');
 }
-
 const knowledgeContext = buildKnowledgeContext();
 
-// 4. v8 版 - 素材與腳本變數
-const caseySalesLink = 'https://preview--learn-abc-playfully.lovable.app/casey';
-const classVideoUrl = 'http://www.youtube.com/watch?v=rHEO487EiXA';
-const classVideoThumbnailUrl = 'https://img.youtube.com/vi/rHEO487EiXA/hqdefault.jpg';
+//=================================================================
+// 4. 狀態管理 (State Management for Lead Gen)
+//=================================================================
+const userSessions = new Map();
 
-const ageGroupContent = {
-  "3-5歲": `🌱 3-5歲 啟蒙黃金期\n💡 建議從雙語教師開始，降低語言焦慮\n\n建議級別：Level 1, Level 2\n學習重點：\n• 自然發音\n• 基礎單字\n• 遊戲互動\n\n💬 Casey 的貼心提醒：\n這個階段最重要的是「讓孩子喜歡」，不用急著要成效。我建議先用雙語老師建立信心，等孩子敢開口後再轉外師。`,
-  "6-8歲": `📚 6-8歲 建立基礎期\n💡 雙軌並行，精品課+摩天輪課擴展視野\n\n建議級別：Level 2, Level 3, Level 4\n學習重點：\n• 句型應用\n• 閱讀理解\n• 日常會話\n\n💬 Casey 的貼心提醒：\n這年紀的孩子開始有學校課業壓力，我會協助您平衡OiKID課程與學校進度，讓孩子學得輕鬆又能應付考試。`,
-  "9-12歲": `🚀 9-12歲 能力躍升期\n💡 外師為主，加強口說與思辨能力\n\n建議級別：Level 5, Level 6, Level 7\n學習重點：\n• 流利對話\n• 文章寫作\n• 主題討論\n\n💬 Casey 的貼心提醒：\n高年級孩子需要更多挑戰，我會推薦辯論課、文法課，為國中英文打好基礎，也培養國際觀。`,
-  "13-15歲": `🎯 13-15歲 精進專業期\n💡 學術英語與專業主題，培養國際競爭力\n\n建議級別：Level 7, Level 8\n學習重點：\n• 學術寫作\n• 專業簡報\n• 深度辯論\n\n💬 Casey 的貼心提醒：\n國高中階段的孩子需要更專業的訓練，我會協助規劃學測、多益準備課程，同時加強學術英文能力，為未來升學或留學做準備。`
+const STATES = {
+  NONE: 'NONE',
+  AWAITING_NAME: 'AWAITING_NAME',
+  AWAITING_PHONE: 'AWAITING_PHONE',
+  AWAITING_TIME: 'AWAITING_TIME'
 };
 
-// 5. 初始化 LINE / Gemini / Express
+// 儲存名單到 CSV
+function saveLeadToCSV(userId, data) {
+  const filePath = path.join(__dirname, '../leads.csv');
+  const timestamp = new Date().toISOString();
+  const newLine = `"${timestamp}","${data.name}","${data.phone}","${data.preferredTime}","NEW"\n`;
+
+  fs.appendFile(filePath, newLine, (err) => {
+    if (err) console.error('Error saving lead:', err);
+    else console.log(`Lead saved for user ${userId}`);
+  });
+}
+
+//=================================================================
+// 5. 初始化
+//=================================================================
 const client = new Client(lineConfig);
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 global.fetch = global.fetch || fetch;
@@ -156,250 +137,257 @@ app.post('/webhook', middleware(lineConfig), async (req, res) => {
   res.status(200).end();
 });
 
-// 6. v8 版 - 核心事件處理器 (handleEvent)
+//=================================================================
+// 6. 核心事件處理器 (handleEvent)
+//=================================================================
 async function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return;
   }
 
-  const replyToken = event.replyToken;
-  if (
-    replyToken === '00000000000000000000000000000000' ||
-    replyToken === 'ffffffffffffffffffffffffffffffff'
-  ) {
-    return;
-  }
-
+  const userId = event.source.userId;
+  const sourceType = event.source.type; // 'user', 'group', or 'room'
   const userText = event.message.text.trim();
-  let replyMsg;
+  const replyToken = event.replyToken;
 
-  // --- 1. 處理「你好」或「主選單」 ---
-  if (
-    userText.includes('你好') ||
-    userText.includes('Hello') ||
-    userText.toLowerCase() === 'menu' ||
-    userText === '主選單'
-  ) {
-    replyMsg = {
-      type: 'template',
-      altText: '您好！我是 OiKID 線上客服助理。',
-      template: {
-        type: 'buttons',
-        title: '您好！我是 OiKID 24h 線上客服助理',
-        text: '很高興能為您服務，請問您想了解什麼呢？',
-        actions: [
-          { type: 'message', label: '依年齡選課 (推薦)', text: '依年齡選課' },
-          { type: 'message', label: '為什麼選 OiKid？', text: '為什麼選 OiKid' },
-          { type: 'message', label: '師資團隊介紹', text: '師資團隊介紹' },
-          { type: 'message', label: '觀看上課實況 (影片)', text: '觀看上課實況' }
-        ]
-      }
-    };
-    await client.replyMessage(event.replyToken, replyMsg);
-    return;
-  }
+  // --- A. 群組/多人聊天室 邏輯 ---
+  if (sourceType === 'group' || sourceType === 'room') {
+    // 1. 檢查是否被 @提及
+    const mentionees = event.message.mention?.mentionees || [];
 
-  // --- 2. 處理「依年齡選課」 ---
-  if (
-    userText === '依年齡選課' ||
-    userText.toLowerCase().includes('price') ||
-    userText.includes('多少錢')
-  ) {
-    replyMsg = {
-      type: 'text',
-      text:
-        '好的！OiKid 的課程是為 3-15 歲孩子設計的。\n為了提供您最準確的資訊，請問您孩子的年齡是？',
-      quickReply: {
-        items: [
-          {
-            type: 'action',
-            action: {
-              type: 'message',
-              label: '3-5歲 (啟蒙黃金期)',
-              text: '我想了解 3-5歲'
-            }
-          },
-          {
-            type: 'action',
-            action: {
-              type: 'message',
-              label: '6-8歲 (建立基礎期)',
-              text: '我想了解 6-8歲'
-            }
-          },
-          {
-            type: 'action',
-            action: {
-              type: 'message',
-              label: '9-12歲 (能力躍升期)',
-              text: '我想了解 9-12歲'
-            }
-          },
-          {
-            type: 'action',
-            action: {
-              type: 'message',
-              label: '13-15歲 (精進專業期)',
-              text: '我想了解 13-15歲'
-            }
-          }
-        ]
-      }
-    };
-    await client.replyMessage(event.replyToken, replyMsg);
-    return;
-  }
+    // 如果沒有 mention 物件，代表這只是一般群組訊息 -> 忽略。
+    if (mentionees.length === 0) {
+      return; // 沒人被 @，忽略
+    }
 
-  // --- 3. 處理「我想了解...歲」 ---
-  if (userText.startsWith('我想了解 ')) {
-    const ageKey = userText.replace('我想了解 ', '').trim();
-    const scriptedReply = ageGroupContent[ageKey];
-
-    if (scriptedReply) {
-      const msg1 = { type: 'text', text: scriptedReply };
-      const msg2 = {
+    // 2. 群組內不進行 Lead Gen (隱私保護)
+    // 如果使用者在群組問「我要預約」，引導私訊。
+    if (userText.includes('預約') || userText.includes('試聽')) {
+      await client.replyMessage(replyToken, {
         type: 'text',
-        text:
-          `想知道 Casey 顧問如何為這年紀的孩子打造專屬學習路徑嗎？\n歡迎查看詳細介紹： ${caseySalesLink}`,
-        quickReply: {
-          items: [
-            {
-              type: 'action',
-              action: {
-                type: 'message',
-                label: '觀看上課實況 (影片)',
-                text: '觀看上課實況'
-              }
-            },
-            { type: 'action', action: { type: 'message', label: '師資團隊介紹', text: '師資團隊介紹' } }
-          ]
-        }
-      };
-      await client.replyMessage(event.replyToken, [msg1, msg2]);
+        text: '太棒了！為了保護您的隱私 (避免在群組公開電話)，請您直接點擊我的頭像「私訊」我，或由群組內的業務人員為您服務喔！😊'
+      });
       return;
     }
-  }
 
-  // --- 4. 處理「觀看上課實況」 ---
-  if (userText === '觀看上課實況') {
-    replyMsg = {
-      type: 'template',
-      altText: '觀看 OiKid 上課實況影片',
-      template: {
-        type: 'buttons',
-        title: '觀看上課實況',
-        text: '立即觀看 OiKid 上課實況影片，感受孩子線上互動學習的模樣。',
-        actions: [
-          { type: 'uri', label: '開啟影片', uri: classVideoUrl },
-          { type: 'message', label: '依年齡選課', text: '依年齡選課' },
-          { type: 'message', label: '為什麼選 OiKid？', text: '為什麼選 OiKid' }
-        ]
-      }
-    };
-    await client.replyMessage(event.replyToken, replyMsg);
+    // 3. 群組內的一般 AI 回覆
+    // 移除 @ 符號與名字，避免 AI 讀到奇怪的字
+    const replyText = await callGemini(userText);
+    await client.replyMessage(replyToken, { type: 'text', text: replyText });
     return;
   }
 
-  // --- 5. 處理「為什麼選 OiKid」 ---
-  if (userText === '為什麼選 OiKid') {
-    replyMsg = {
-      type: 'template',
-      altText: '為什麼要選擇 OiKid？',
-      template: {
-        type: 'buttons',
-        title: '為什麼選擇 OiKid？',
-        text: '我們有四大核心優勢，您可以點擊下方按鈕，由 AI 助理為您說明：',
-        actions: [
-          { type: 'message', label: '360° 學習體驗', text: '我想了解 360 學習體驗' },
-          { type: 'message', label: '獨家教材特色', text: '我想了解教材特色' },
-          { type: 'message', label: '獨家技術加持', text: '我想了解 OiKid 技術' },
-          { type: 'message', label: '真實服務成效', text: '我想看家長見證' }
-        ]
-      }
-    };
-    await client.replyMessage(event.replyToken, replyMsg);
+  // --- B. 一對一私訊 (1-on-1) 邏輯 ---
+
+  // 取得或初始化 User Session
+  let session = userSessions.get(userId) || { state: STATES.NONE, data: {} };
+
+  // 1. 觸發預約
+  if (userText === '立即預約體驗' || userText.includes('我要預約') || userText.includes('試聽')) {
+    userSessions.set(userId, { state: STATES.AWAITING_NAME, data: {} });
+    await client.replyMessage(replyToken, {
+      type: 'text',
+      text: '太棒了！給孩子一個愛上英文的機會。🌱\n\n請問怎麼稱呼您呢？(例如：陳媽媽、林先生)'
+    });
     return;
   }
 
-  // --- 6. 處理「師資團隊介紹」 ---
-  if (userText === '師資團隊介紹') {
-    replyMsg = {
-      type: 'template',
-      altText: 'OiKid 師資團隊介紹',
-      template: {
-        type: 'buttons',
-        title: 'OiKid 師資團隊',
-        text: '我們的師資分為「專業外師」與「貼心雙語教師」，您想先了解哪一個？',
-        actions: [
-          { type: 'message', label: '我想了解外師', text: '我想了解外師' },
-          { type: 'message', label: '我想了解雙語中師', text: '我想了解雙語中師' }
-        ]
-      }
-    };
-    await client.replyMessage(event.replyToken, replyMsg);
+  // 2. 接收姓名 -> 問電話
+  if (session.state === STATES.AWAITING_NAME) {
+    session.data.name = userText;
+    session.state = STATES.AWAITING_PHONE;
+    userSessions.set(userId, session);
+    await client.replyMessage(replyToken, {
+      type: 'text',
+      text: `好的 ${userText}，為了讓顧問能聯繫您安排時間，請留下您的手機號碼：`
+    });
     return;
   }
 
-  // --- Fallback: 呼叫 Gemini
+  // 3. 接收電話 -> 問方便聯絡時段
+  if (session.state === STATES.AWAITING_PHONE) {
+    if (userText.length < 8 || isNaN(Number(userText.replace(/-/g, '')))) {
+      await client.replyMessage(replyToken, {
+        type: 'text',
+        text: '這似乎不是有效的手機號碼，請重新輸入一次喔：'
+      });
+      return;
+    }
+    session.data.phone = userText;
+    session.state = STATES.AWAITING_TIME;
+    userSessions.set(userId, session);
+    await client.replyMessage(replyToken, {
+      type: 'text',
+      text: '收到！最後請問您方便接聽電話的時段是？\n(例如：平日下午、週末早上、晚上8點後都可以)'
+    });
+    return;
+  }
+
+  // 4. 接收方便時段 -> 完成
+  if (session.state === STATES.AWAITING_TIME) {
+    session.data.preferredTime = userText;
+    saveLeadToCSV(userId, session.data);
+    userSessions.delete(userId);
+    await client.replyMessage(replyToken, {
+      type: 'text',
+      text: `太好了！我已經收到您的資料：\n\n👤 稱呼：${session.data.name}\n📞 電話：${session.data.phone}\n⏰ 方便時段：${session.data.preferredTime}\n\n我們的專業顧問會盡快在您方便的時段與您聯繫，協助安排最適合的免費體驗課程！✨\n\n期待您的寶貝能在 OiKID 找到學英文的樂趣！如果還有其他問題，隨時都可以問我喔！😊`
+    });
+    return;
+  }
+
+  // 檢測「上課方式」相關問題 → 自動分享影片
+  if (
+    userText.includes('上課') ||
+    userText.includes('怎麼教') ||
+    userText.includes('課程內容') ||
+    userText.includes('教學方式') ||
+    userText.includes('實際上課')
+  ) {
+    await client.replyMessage(replyToken, getVideoFlexMessage());
+    return;
+  }
+
+  // --- 一般對話處理 ---
+
+  if (userText === '主選單' || userText.toLowerCase() === 'menu') {
+    await client.replyMessage(replyToken, {
+      type: 'template',
+      altText: 'OiKID 服務選單',
+      template: {
+        type: 'buttons',
+        thumbnailImageUrl: 'https://www.oikid.com/images/og-image.jpg', // 使用官網 OG Image 確保穩定
+        imageAspectRatio: 'rectangle',
+        imageSize: 'cover',
+        title: 'OiKID 英語線上學習',
+        text: '歡迎！我是您的專屬顧問 Casey。請問想了解什麼？',
+        actions: [
+          { type: 'message', label: '立即預約體驗 (免費)', text: '立即預約體驗' },
+          { type: 'message', label: '課程與費用說明', text: '課程與費用說明' },
+          { type: 'message', label: '師資團隊介紹', text: '師資團隊介紹' },
+          { type: 'message', label: '常見問題', text: '常見問題' }
+        ]
+      }
+    });
+    return;
+  }
+
+  // Fallback: 呼叫 Gemini
   let replyText;
   try {
     replyText = await callGemini(userText);
   } catch (error) {
-    console.error('Gemini API error:', error?.response?.data || error);
-    replyText = '抱歉，我現在遇到一些問題，請稍後再試一次。';
+    console.error('Gemini API error:', error);
+    replyText = '抱歉，系統忙線中，請稍後再試。';
   }
 
-  if (!replyText) {
-    replyText = '抱歉，我現在沒有適合的回答。';
-  }
-
-  await client.replyMessage(event.replyToken, {
+  await client.replyMessage(replyToken, {
     type: 'text',
     text: replyText
   });
 }
 
-// 7. v8 版 - AI 後援提示 (buildSystemPrompt)
+//=================================================================
+// 7. Flex Messages
+//=================================================================
+function getVideoFlexMessage() {
+  return {
+    type: 'flex',
+    altText: 'OiKID 上課實況影片',
+    contents: {
+      type: 'bubble',
+      hero: {
+        type: 'image',
+        url: 'https://www.oikid.com/images/og-image.jpg', // 改用官網圖片
+        size: 'full',
+        aspectRatio: '20:13',
+        aspectMode: 'cover',
+        action: {
+          type: 'uri',
+          uri: 'https://www.youtube.com/@OiKID' // 改連到官方頻道首頁
+        }
+      },
+      body: {
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+          {
+            type: 'text',
+            text: 'OiKID 上課實況',
+            weight: 'bold',
+            size: 'xl'
+          },
+          {
+            type: 'text',
+            text: '點擊下方按鈕，前往我們的官方 YouTube 頻道，觀看更多小朋友開心上課的精彩片段！✨',
+            margin: 'md',
+            size: 'sm',
+            color: '#666666',
+            wrap: true
+          }
+        ]
+      },
+      footer: {
+        type: 'box',
+        layout: 'vertical',
+        spacing: 'sm',
+        contents: [
+          {
+            type: 'button',
+            style: 'primary',
+            height: 'sm',
+            action: {
+              type: 'uri',
+              label: '前往觀看影片',
+              uri: 'https://www.youtube.com/@OiKID'
+            },
+            color: '#FF9900'
+          },
+          {
+            type: 'button',
+            style: 'link',
+            height: 'sm',
+            action: {
+              type: 'message',
+              label: '我要預約體驗',
+              text: '我要預約'
+            }
+          }
+        ],
+        flex: 0
+      }
+    }
+  };
+}
+
+//=================================================================
+// 8. AI 系統提示 (Casey Persona)
+//=================================================================
 function buildSystemPrompt() {
-  const conversationRules = [
-    '**【AI 規則】（你是一個 AI 後援，只在腳本無法處理時才會被呼叫）：**',
-    '1. 【嚴禁洗版】：你的回覆**必須**精簡在「一個」回覆訊息中。',
-    '2. 【只答所問】：你必須**只回答**用戶当前提出的**具體問題**（例如「退費機制」、「如何取消課程」、「我想了解外師」）。',
-    '3. 【嚴禁引導】：**絕對禁止**主動提供「您可以試著問我...」之類的引導，因為那是主要腳本的工作。你只需回答問題。'
-  ].join('\n');
-
-  const formattingRules = [
-    '**【排版規則】（你必須嚴格遵守）：**',
-    '1. 【目標介面】：你的回覆將顯示在「手機 LINE」的聊天視窗中。因此**嚴禁回覆任何擠在一起的長篇文字**。',
-    '2. 【強制換行】：在回答時，每個句子、每個要點、或段落之間，**必須**使用「換行符」(\n) 進行分隔。',
-    '3. 【強制列表化】：當答案包含多個項目時（例如：退費規定、聯絡方式），**絕對必須**使用「項目符號列表」來呈現。',
-    '4. 【友善包裝 (極重要)】：**絕對禁止**只回傳生硬的條目！你必須用「友善且完整的句子」來包裝你的答案。',
-    '   - **(錯誤 ❌)：**',
-    '     • 課程開始前 24 小時可免費取消',
-    '     • 逾時視同上課',
-    '   - **(正確 ✅)：**',
-    '     「您好，關於取消課程的規定如下：',
-    '     • 課程開始前 24 小時可免費取消。',
-    '     • 若逾時取消，將視同上課並扣除堂數喔。」',
-    '5. 【語氣】：保持專業、友善、有同理心。'
-  ].join('\n');
-
   return [
-    systemInstruction,
+    '**角色設定**: 你是 Casey (凱西)，OiKID 的資深教育顧問。你也是一位有兩個孩子的媽媽，非常了解家長對孩子學英文的焦慮。',
+    '**核心性格**: 溫暖、有同理心、專業但不嚴肅、像朋友一樣聊天。',
+    '**說話風格**:',
+    '1. **口語化**: 多用「喔、呢、呀、吧」等語助詞，不要像機器人一樣冷冰冰。',
+    '2. **同理心優先**: 回答問題前，先同理家長的感受。例如：「我懂您的擔心，小朋友剛開始接觸外師真的會比較害羞...」',
+    '3. **表情符號**: 適度使用 😊, 🌱, ✨, 💪 來增加溫度。',
+    '4. **引導行動**: 回答完後，用輕鬆的方式邀請體驗。',
     '',
-    conversationRules,
+    '**重要規則**:',
+    '- **絕對不要**提供任何「預約連結」或「點擊這裡」之類的文字。',
+    '- 當家長想預約體驗課時，請引導他們直接在對話中輸入「我要預約」，系統會自動收集聯絡資訊。',
+    '- 例如：「想讓孩子試試看嗎？直接跟我說『我要預約』，我會幫您安排喔！」',
     '',
-    formattingRules,
-    '',
-    '--- 以下是客服人員必備的參考資料 (知識庫) ---',
+    '**知識庫**:',
     knowledgeContext,
-    '--- 參考資料結束 ---',
     '',
-    '（你現在是 OiKID 客服助理，請嚴格遵守上述所有規則，並根據知識庫資料，回覆客戶的下一個問題）'
+    '**任務目標**: 回答家長問題，並讓他們覺得「被理解」，最後願意讓孩子試試看免費體驗課。',
+    '**限制**: 回覆長度不要太長，適合手機閱讀。繁體中文回答。'
   ].join('\n');
 }
 
-// 8. v8 版 - AI 核心呼叫 (callGemini)
+//=================================================================
+// 8. Gemini API 呼叫
+//=================================================================
 async function callGemini(prompt) {
   try {
     const model = genAI.getGenerativeModel({
@@ -407,31 +395,12 @@ async function callGemini(prompt) {
       systemInstruction: buildSystemPrompt()
     });
 
-    const history = [
-      {
-        role: 'user',
-        parts: [{ text: `客戶提問：${prompt}` }]
-      }
-    ];
-
-    const result = await model.generateContent({
-      contents: history
-    });
-
+    const result = await model.generateContent(prompt);
     const response = await result.response;
-    const text = response.text();
-
-    if (text) {
-      return text.trim();
-    }
-    console.error('Gemini SDK returned empty response.');
-    return null;
+    return response.text().trim();
   } catch (error) {
-    console.error('Error calling Gemini SDK:', error);
-    if (error?.response?.data) {
-      console.error('Gemini API Error Details:', error.response.data);
-    }
-    return null;
+    console.error('Gemini Error:', error);
+    return '抱歉，我目前無法回答這個問題，建議您直接輸入「我要預約」由專人為您服務。';
   }
 }
 
@@ -440,9 +409,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`LINE bot server is running on port ${port}`);
 });
-
-//=================================================================
-// 【程式碼結束】
-//=================================================================
-
-
