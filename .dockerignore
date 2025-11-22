@@ -1,0 +1,9 @@
+node_modules
+.env
+.git
+*.log
+simulation_results.json
+test_cases_100.json
+leads.csv
+run_100_sim.js
+generate_cases.js
