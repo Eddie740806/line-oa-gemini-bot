@@ -82,7 +82,7 @@ function getVideoFlexMessage() {
             type: 'bubble',
             hero: {
                 type: 'image',
-                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Happy child learning
+                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1000', // Happy child learning
                 size: 'full',
                 aspectRatio: '20:13',
                 aspectMode: 'cover',
@@ -147,12 +147,12 @@ function getVideoFlexMessage() {
 function getWelcomeFlexMessage() {
     return {
         type: 'flex',
-        altText: '歡迎來到 OiKID！🌱',
+        altText: '歡迎來到 OiKID！🌱 (v2)',
         contents: {
             type: 'bubble',
             hero: {
                 type: 'image',
-                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Happy child learning
+                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1000', // Happy child learning (Cleaner URL)
                 size: 'full',
                 aspectRatio: '20:13',
                 aspectMode: 'cover',
