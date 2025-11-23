@@ -229,7 +229,11 @@ function getCurriculumIntroFlexMessage() {
                         url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1000', // Spiral Learning
                         size: 'full',
                         aspectRatio: '20:13',
-                        aspectMode: 'cover'
+                        aspectMode: 'cover',
+                        action: {
+                            type: 'uri',
+                            uri: 'https://youtu.be/AYdL25d8xU8'
+                        }
                     },
                     body: {
                         type: 'box',
@@ -279,7 +283,18 @@ function getCurriculumIntroFlexMessage() {
                     footer: {
                         type: 'box',
                         layout: 'vertical',
+                        spacing: 'sm',
                         contents: [
+                            {
+                                type: 'button',
+                                style: 'secondary',
+                                action: {
+                                    type: 'uri',
+                                    label: '🎥 觀看教學影片',
+                                    uri: 'https://youtu.be/AYdL25d8xU8'
+                                },
+                                color: '#FF9900'
+                            },
                             {
                                 type: 'button',
                                 style: 'primary',
