@@ -123,12 +123,19 @@ async function handleEvent(event) {
   }
 
   if (userText.startsWith('年齡：')) {
+    const age = userText.split('：')[1];
+    let session = userSessions.get(userId) || { state: STATES.NONE, data: {} };
+    session.data.age = age;
+    userSessions.set(userId, session);
+
     await client.replyMessage(replyToken, getPersonalitySelectionFlexMessage());
     return;
   }
 
   if (userText.startsWith('個性：')) {
-    await client.replyMessage(replyToken, getRecommendationFlexMessage(userText));
+    let session = userSessions.get(userId) || { state: STATES.NONE, data: {} };
+    const age = session.data.age;
+    await client.replyMessage(replyToken, getRecommendationFlexMessage(userText, age));
     return;
   }
 
