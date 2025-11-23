@@ -246,7 +246,7 @@ async function handleEvent(event) {
       altText: 'OiKID 服務選單',
       template: {
         type: 'buttons',
-        thumbnailImageUrl: 'https://www.oikid.com/images/og-image.jpg', // 使用官網 OG Image 確保穩定
+        thumbnailImageUrl: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Happy child learning
         imageAspectRatio: 'rectangle',
         imageSize: 'cover',
         title: 'OiKID 英語線上學習',

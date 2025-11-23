@@ -82,7 +82,7 @@ function getVideoFlexMessage() {
             type: 'bubble',
             hero: {
                 type: 'image',
-                url: 'https://www.oikid.com/images/og-image.jpg', // 改用官網圖片
+                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Happy child learning
                 size: 'full',
                 aspectRatio: '20:13',
                 aspectMode: 'cover',
@@ -152,7 +152,7 @@ function getWelcomeFlexMessage() {
             type: 'bubble',
             hero: {
                 type: 'image',
-                url: 'https://www.oikid.com/images/og-image.jpg',
+                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80', // Happy child learning
                 size: 'full',
                 aspectRatio: '20:13',
                 aspectMode: 'cover',
