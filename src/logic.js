@@ -166,77 +166,224 @@ function getTeacherIntroFlexMessage() {
 function getCurriculumIntroFlexMessage() {
     return {
         type: 'flex',
-        altText: 'OiKID 獨家螺旋式教材',
+        altText: 'OiKID 獨家螺旋式教材介紹',
         contents: {
-            type: 'bubble',
-            hero: {
-                type: 'image',
-                url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1000', // Curriculum image
-                size: 'full',
-                aspectRatio: '20:13',
-                aspectMode: 'cover'
-            },
-            body: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'text',
-                        text: '📚 獨家螺旋式教材',
-                        weight: 'bold',
-                        size: 'xl'
+            type: 'carousel',
+            contents: [
+                {
+                    type: 'bubble',
+                    hero: {
+                        type: 'image',
+                        url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1000', // Spiral Learning
+                        size: 'full',
+                        aspectRatio: '20:13',
+                        aspectMode: 'cover'
                     },
-                    {
-                        type: 'text',
-                        text: '結合美國 CCSS 與台灣 108 課綱。',
-                        margin: 'md',
-                        size: 'sm',
-                        color: '#666666'
-                    },
-                    {
+                    body: {
                         type: 'box',
                         layout: 'vertical',
-                        margin: 'md',
-                        spacing: 'sm',
                         contents: [
                             {
                                 type: 'text',
-                                text: '• 螺旋式學習：循序漸進，加深記憶',
-                                size: 'xs',
-                                color: '#666666'
+                                text: '🌀 獨家螺旋式學習法',
+                                weight: 'bold',
+                                size: 'xl'
                             },
                             {
                                 type: 'text',
-                                text: '• 遊戲化教學：讓孩子愛上開口說',
-                                size: 'xs',
+                                text: '讓語感自然「長」出來，而非死記硬背。',
+                                margin: 'md',
+                                size: 'sm',
                                 color: '#666666'
                             },
                             {
-                                type: 'text',
-                                text: '• 課後分析：提供專業數據報告 📊',
-                                size: 'xs',
-                                color: '#666666'
+                                type: 'box',
+                                layout: 'vertical',
+                                margin: 'md',
+                                spacing: 'sm',
+                                contents: [
+                                    {
+                                        type: 'text',
+                                        text: '• 觀念循環：舊觀念複習 + 新知識延伸',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 深度堆疊：從單字 → 句子 → 故事表達',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 建立自信：在熟悉的基礎上挑戰新知',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    footer: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'button',
+                                style: 'primary',
+                                action: {
+                                    type: 'message',
+                                    label: '了解更多',
+                                    text: '課程內容'
+                                },
+                                color: '#FF9900'
                             }
                         ]
                     }
-                ]
-            },
-            footer: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'button',
-                        style: 'primary',
-                        action: {
-                            type: 'message',
-                            label: '了解更多',
-                            text: '課程內容'
-                        },
-                        color: '#FF9900'
+                },
+                {
+                    type: 'bubble',
+                    hero: {
+                        type: 'image',
+                        url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1000', // Interdisciplinary
+                        size: 'full',
+                        aspectRatio: '20:13',
+                        aspectMode: 'cover'
+                    },
+                    body: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'text',
+                                text: '🌍 跨領域學科英語',
+                                weight: 'bold',
+                                size: 'xl'
+                            },
+                            {
+                                type: 'text',
+                                text: '對標美國 CCSS 與台灣 108 課綱。',
+                                margin: 'md',
+                                size: 'sm',
+                                color: '#666666'
+                            },
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                margin: 'md',
+                                spacing: 'sm',
+                                contents: [
+                                    {
+                                        type: 'text',
+                                        text: '• 學科整合：用英文學數學、科學、社會',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 邏輯思考：培養解決問題的能力',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 生活應用：將語言落實於真實情境',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    footer: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'button',
+                                style: 'primary',
+                                action: {
+                                    type: 'message',
+                                    label: '預約體驗',
+                                    text: '我要預約'
+                                },
+                                color: '#FF9900'
+                            }
+                        ]
                     }
-                ]
-            }
+                },
+                {
+                    type: 'bubble',
+                    hero: {
+                        type: 'image',
+                        url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000', // Analysis
+                        size: 'full',
+                        aspectRatio: '20:13',
+                        aspectMode: 'cover'
+                    },
+                    body: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'text',
+                                text: '📊 學習成效可視化',
+                                weight: 'bold',
+                                size: 'xl'
+                            },
+                            {
+                                type: 'text',
+                                text: '完整的學習閉環，確保每一堂課的吸收。',
+                                margin: 'md',
+                                size: 'sm',
+                                color: '#666666'
+                            },
+                            {
+                                type: 'box',
+                                layout: 'vertical',
+                                margin: 'md',
+                                spacing: 'sm',
+                                contents: [
+                                    {
+                                        type: 'text',
+                                        text: '• 標準流程：暖身→複習→新知→練習→產出',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 課後分析：提供各項能力雷達圖報告',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    },
+                                    {
+                                        type: 'text',
+                                        text: '• 錄影回放：隨時複習上課精彩片段',
+                                        size: 'xs',
+                                        color: '#666666'
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    footer: {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [
+                            {
+                                type: 'button',
+                                style: 'primary',
+                                action: {
+                                    type: 'message',
+                                    label: '領取分析報告',
+                                    text: '我要預約'
+                                },
+                                color: '#FF9900'
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     };
 }
