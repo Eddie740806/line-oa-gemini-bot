@@ -35,7 +35,9 @@ const {
   getAgeSelectionFlexMessage,
   getPersonalitySelectionFlexMessage,
   getRecommendationFlexMessage,
-  getCourseIntroFlexMessage
+  getRecommendationFlexMessage,
+  getTeacherIntroFlexMessage,
+  getCurriculumIntroFlexMessage
 } = require('./logic');
 
 //=================================================================
@@ -144,8 +146,13 @@ async function handleEvent(event) {
     return;
   }
 
-  if (userText === '認識師資與教材') {
-    await client.replyMessage(replyToken, getCourseIntroFlexMessage());
+  if (userText === '認識師資') {
+    await client.replyMessage(replyToken, getTeacherIntroFlexMessage());
+    return;
+  }
+
+  if (userText === '認識教材') {
+    await client.replyMessage(replyToken, getCurriculumIntroFlexMessage());
     return;
   }
 
