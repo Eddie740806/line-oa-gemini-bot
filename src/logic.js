@@ -25,7 +25,7 @@ const knowledgeBase = [
 function getWelcomeFlexMessage() {
     return {
         type: 'flex',
-        altText: '歡迎來到 OiKID！🌱 (v6)',
+        altText: '歡迎來到 OiKID！🌱 (v7)',
         contents: {
             type: 'bubble',
             hero: {
