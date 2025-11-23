@@ -1,5 +1,5 @@
 //=================================================================
-// 【OiKID Line Bot v10.0 - Group Support & Warm Persona】
+// 【OiKID Line Bot v10.1 - Group Support & Warm Persona】
 //=================================================================
 
 require('dotenv').config();
