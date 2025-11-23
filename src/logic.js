@@ -226,33 +226,34 @@ function getWelcomeFlexMessage() {
                         color: '#FF9900'
                     },
                     {
-                        type: 'box',
-                        layout: 'horizontal',
-                        spacing: 'sm',
-                        contents: [
-                            {
-                                type: 'button',
-                                style: 'secondary',
-                                height: 'sm',
-                                action: {
-                                    type: 'message',
-                                    label: '👩‍🏫 認識師資',
-                                    text: '認識師資'
-                                },
-                                flex: 1
-                            },
-                            {
-                                type: 'button',
-                                style: 'secondary',
-                                height: 'sm',
-                                action: {
-                                    type: 'message',
-                                    label: '📚 認識教材',
-                                    text: '認識教材'
-                                },
-                                flex: 1
-                            }
-                        ]
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '👩‍🏫 認識師資',
+                            text: '認識師資'
+                        }
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '📚 認識教材',
+                            text: '認識教材'
+                        }
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '📺 觀看上課影片',
+                            text: '觀看上課影片'
+                        }
                     },
                     {
                         type: 'button',
@@ -260,8 +261,8 @@ function getWelcomeFlexMessage() {
                         height: 'sm',
                         action: {
                             type: 'message',
-                            label: '📺 觀看上課影片',
-                            text: '觀看上課影片'
+                            label: '🙋‍♀️ 直接找 Casey 聊聊',
+                            text: '我想找顧問聊聊'
                         }
                     }
                 ],
