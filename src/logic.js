@@ -133,7 +133,11 @@ function getTeacherIntroFlexMessage() {
                 url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1000', // Teacher image
                 size: 'full',
                 aspectRatio: '20:13',
-                aspectMode: 'cover'
+                aspectMode: 'cover',
+                action: {
+                    type: 'uri',
+                    uri: 'https://www.youtube.com/watch?v=J33-3q3F3kE'
+                }
             },
             body: {
                 type: 'box',
@@ -169,6 +173,12 @@ function getTeacherIntroFlexMessage() {
                                 text: '• 外籍師：來自美加英澳 🇺🇸🇬🇧🇨🇦🇦🇺',
                                 size: 'xs',
                                 color: '#666666'
+                            },
+                            {
+                                type: 'text',
+                                text: '• 100% 具有教學證照與豐富經驗',
+                                size: 'xs',
+                                color: '#666666'
                             }
                         ]
                     }
@@ -177,7 +187,18 @@ function getTeacherIntroFlexMessage() {
             footer: {
                 type: 'box',
                 layout: 'vertical',
+                spacing: 'sm',
                 contents: [
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        action: {
+                            type: 'uri',
+                            label: '🎥 觀看師資教學影片',
+                            uri: 'https://www.youtube.com/watch?v=J33-3q3F3kE'
+                        },
+                        color: '#FF9900'
+                    },
                     {
                         type: 'button',
                         style: 'primary',
