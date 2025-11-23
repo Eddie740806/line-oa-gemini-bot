@@ -25,7 +25,7 @@ const knowledgeBase = [
 function getWelcomeFlexMessage() {
     return {
         type: 'flex',
-        altText: '歡迎來到 OiKID！🌱 (v7)',
+        altText: '歡迎來到 OiKID！🌱 (v8)',
         contents: {
             type: 'bubble',
             hero: {
@@ -136,7 +136,7 @@ function getTeacherIntroFlexMessage() {
                 aspectMode: 'cover',
                 action: {
                     type: 'uri',
-                    uri: 'https://www.youtube.com/watch?v=J33-3q3F3kE'
+                    uri: 'https://www.youtube.com/watch?v=R0_q_K7tHwI'
                 }
             },
             body: {
@@ -195,7 +195,7 @@ function getTeacherIntroFlexMessage() {
                         action: {
                             type: 'uri',
                             label: '🎥 觀看師資教學影片',
-                            uri: 'https://www.youtube.com/watch?v=J33-3q3F3kE'
+                            uri: 'https://www.youtube.com/watch?v=R0_q_K7tHwI'
                         },
                         color: '#FF9900'
                     },
