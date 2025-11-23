@@ -144,9 +144,20 @@ async function handleEvent(event) {
     return;
   }
 
-  if (userText === '我想直接詢問') {
-    // Let it fall through to Gemini, but maybe with a specific prompt or state?
-    // For now, let Gemini handle it naturally as Casey.
+  if (userText === '認識師資與教材') {
+    await client.replyMessage(replyToken, getCourseIntroFlexMessage());
+    return;
+  }
+
+  if (
+    userText.includes('上課') ||
+    userText.includes('怎麼教') ||
+    userText.includes('課程內容') ||
+    userText.includes('教學方式') ||
+    userText.includes('實際上課')
+  ) {
+    await client.replyMessage(replyToken, getVideoFlexMessage());
+    return;
   }
 
   // --- A. 群組/多人聊天室 邏輯 ---
@@ -234,22 +245,7 @@ async function handleEvent(event) {
     return;
   }
 
-  // 檢測「上課方式」相關問題 → 自動分享影片
-  if (
-    userText.includes('上課') ||
-    userText.includes('怎麼教') ||
-    userText.includes('課程內容') ||
-    userText.includes('教學方式') ||
-    userText.includes('實際上課')
-  ) {
-    await client.replyMessage(replyToken, getVideoFlexMessage());
-    return;
-  }
 
-  if (userText === '認識師資與教材') {
-    await client.replyMessage(replyToken, getCourseIntroFlexMessage());
-    return;
-  }
 
   // --- 一般對話處理 ---
 
