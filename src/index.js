@@ -34,7 +34,8 @@ const {
   getWelcomeFlexMessage,
   getAgeSelectionFlexMessage,
   getPersonalitySelectionFlexMessage,
-  getRecommendationFlexMessage
+  getRecommendationFlexMessage,
+  getCourseIntroFlexMessage
 } = require('./logic');
 
 //=================================================================
@@ -235,6 +236,11 @@ async function handleEvent(event) {
     userText.includes('實際上課')
   ) {
     await client.replyMessage(replyToken, getVideoFlexMessage());
+    return;
+  }
+
+  if (userText === '認識師資與教材') {
+    await client.replyMessage(replyToken, getCourseIntroFlexMessage());
     return;
   }
 
