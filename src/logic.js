@@ -25,7 +25,7 @@ const knowledgeBase = [
 function getWelcomeFlexMessage() {
     return {
         type: 'flex',
-        altText: '歡迎來到 OiKID！🌱 (v5)',
+        altText: '歡迎來到 OiKID！🌱 (v6)',
         contents: {
             type: 'bubble',
             hero: {
@@ -81,11 +81,42 @@ function getWelcomeFlexMessage() {
                         height: 'sm',
                         action: {
                             type: 'message',
-                            label: '了解 OiKID 課程',
-                            text: '課程介紹'
+                            label: '👩‍🏫 認識師資',
+                            text: '認識師資'
+                        }
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '📚 認識教材',
+                            text: '認識教材'
+                        }
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '📺 觀看上課影片',
+                            text: '觀看上課影片'
+                        }
+                    },
+                    {
+                        type: 'button',
+                        style: 'link',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '🙋‍♀️ 直接找 Casey 聊聊',
+                            text: '我想找顧問聊聊'
                         }
                     }
-                ]
+                ],
+                flex: 0
             }
         }
     };
