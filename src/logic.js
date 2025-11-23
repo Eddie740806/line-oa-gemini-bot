@@ -22,6 +22,75 @@ const knowledgeBase = [
 
 // ... (buildKnowledgeContext, buildSystemPrompt, getVideoFlexMessage remain same)
 
+function getWelcomeFlexMessage() {
+    return {
+        type: 'flex',
+        altText: '歡迎來到 OiKID！🌱 (v5)',
+        contents: {
+            type: 'bubble',
+            hero: {
+                type: 'image',
+                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1000', // Happy child learning
+                size: 'full',
+                aspectRatio: '20:13',
+                aspectMode: 'cover',
+                action: {
+                    type: 'uri',
+                    uri: 'https://www.oikid.com'
+                }
+            },
+            body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [
+                    {
+                        type: 'text',
+                        text: 'Hi 媽咪/爸比，我是 Casey！👋',
+                        weight: 'bold',
+                        size: 'lg'
+                    },
+                    {
+                        type: 'text',
+                        text: '很高興認識您！每個孩子都是獨一無二的，為了給您最適合的建議，我想先了解一下寶貝的狀況。😊',
+                        margin: 'md',
+                        size: 'sm',
+                        color: '#666666',
+                        wrap: true
+                    }
+                ]
+            },
+            footer: {
+                type: 'box',
+                layout: 'vertical',
+                spacing: 'sm',
+                contents: [
+                    {
+                        type: 'button',
+                        style: 'primary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '🎯 開始免費評測 (推薦)',
+                            text: '開始免費評測'
+                        },
+                        color: '#FF9900'
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        height: 'sm',
+                        action: {
+                            type: 'message',
+                            label: '了解 OiKID 課程',
+                            text: '課程介紹'
+                        }
+                    }
+                ]
+            }
+        }
+    };
+}
+
 function getTeacherIntroFlexMessage() {
     return {
         type: 'flex',
@@ -172,105 +241,7 @@ function getCurriculumIntroFlexMessage() {
     };
 }
 
-function getWelcomeFlexMessage() {
-    return {
-        type: 'flex',
-        altText: '歡迎來到 OiKID！🌱 (v4)',
-        contents: {
-            type: 'bubble',
-            hero: {
-                type: 'image',
-                url: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1000', // Happy child learning
-                size: 'full',
-                aspectRatio: '20:13',
-                aspectMode: 'cover',
-                action: {
-                    type: 'uri',
-                    uri: 'https://www.oikid.com'
-                }
-            },
-            body: {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                    {
-                        type: 'text',
-                        text: 'Hi 媽咪/爸比，我是 Casey！👋',
-                        weight: 'bold',
-                        size: 'lg'
-                    },
-                    {
-                        type: 'text',
-                        text: '很高興認識您！每個孩子都是獨一無二的，為了給您最適合的建議，我想先了解一下寶貝的狀況。😊',
-                        margin: 'md',
-                        size: 'sm',
-                        color: '#666666',
-                        wrap: true
-                    }
-                ]
-            },
-            footer: {
-                type: 'box',
-                layout: 'vertical',
-                spacing: 'sm',
-                contents: [
-                    {
-                        type: 'button',
-                        style: 'primary',
-                        height: 'sm',
-                        action: {
-                            type: 'message',
-                            label: '🎯 開始免費評測 (推薦)',
-                            text: '開始免費評測'
-                        },
-                        color: '#FF9900'
-                    },
-                    {
-                        type: 'button',
-                        style: 'secondary',
-                        height: 'sm',
-                        action: {
-                            type: 'message',
-                            label: '👩‍🏫 認識師資',
-                            text: '認識師資'
-                        }
-                    },
-                    {
-                        type: 'button',
-                        style: 'secondary',
-                        height: 'sm',
-                        action: {
-                            type: 'message',
-                            label: '📚 認識教材',
-                            text: '認識教材'
-                        }
-                    },
-                    {
-                        type: 'button',
-                        style: 'secondary',
-                        height: 'sm',
-                        action: {
-                            type: 'message',
-                            label: '📺 觀看上課影片',
-                            text: '觀看上課影片'
-                        }
-                    },
-                    {
-                        type: 'button',
-                        style: 'link',
-                        height: 'sm',
-                        action: {
-                            type: 'message',
-                            label: '🙋‍♀️ 直接找 Casey 聊聊',
-                            text: '我想找顧問聊聊'
-                        }
-                    }
-                ],
-                flex: 0
-            }
-        }
-    };
-}
+
 
 // ... (knowledgeBase is defined above)
 

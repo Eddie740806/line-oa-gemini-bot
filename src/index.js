@@ -167,6 +167,12 @@ async function handleEvent(event) {
     return;
   }
 
+  // 若使用者想找顧問聊聊，清除狀態並讓 Gemini 回覆
+  if (userText === '我想找顧問聊聊') {
+    userSessions.delete(userId);
+    // Fall through to Gemini
+  }
+
   // --- A. 群組/多人聊天室 邏輯 ---
   if (sourceType === 'group' || sourceType === 'room') {
     // 1. 檢查是否被 @提及
