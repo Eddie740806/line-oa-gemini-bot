@@ -35,7 +35,6 @@ const {
   getAgeSelectionFlexMessage,
   getPersonalitySelectionFlexMessage,
   getRecommendationFlexMessage,
-  getRecommendationFlexMessage,
   getTeacherIntroFlexMessage,
   getCurriculumIntroFlexMessage
 } = require('./logic');
