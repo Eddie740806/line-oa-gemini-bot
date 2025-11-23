@@ -28,7 +28,14 @@ if (!geminiApiKey) {
 
 const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 
-const { buildSystemPrompt, getVideoFlexMessage } = require('./logic');
+const {
+  buildSystemPrompt,
+  getVideoFlexMessage,
+  getWelcomeFlexMessage,
+  getAgeSelectionFlexMessage,
+  getPersonalitySelectionFlexMessage,
+  getRecommendationFlexMessage
+} = require('./logic');
 
 //=================================================================
 // 3. 知識庫 (Knowledge Base) - 已移至 logic.js
@@ -93,6 +100,12 @@ app.post('/webhook', middleware(lineConfig), async (req, res) => {
 // 6. 核心事件處理器 (handleEvent)
 //=================================================================
 async function handleEvent(event) {
+  // --- 0. 加入好友 (Follow) 事件 ---
+  if (event.type === 'follow') {
+    await client.replyMessage(event.replyToken, getWelcomeFlexMessage());
+    return;
+  }
+
   if (event.type !== 'message' || event.message.type !== 'text') {
     return;
   }
@@ -101,6 +114,32 @@ async function handleEvent(event) {
   const sourceType = event.source.type; // 'user', 'group', or 'room'
   const userText = event.message.text.trim();
   const replyToken = event.replyToken;
+
+  // --- Re-engagement Flow Triggers ---
+  if (userText === '開始免費評測') {
+    await client.replyMessage(replyToken, getAgeSelectionFlexMessage());
+    return;
+  }
+
+  if (userText.startsWith('年齡：')) {
+    await client.replyMessage(replyToken, getPersonalitySelectionFlexMessage());
+    return;
+  }
+
+  if (userText.startsWith('個性：')) {
+    await client.replyMessage(replyToken, getRecommendationFlexMessage(userText));
+    return;
+  }
+
+  if (userText === '觀看上課影片') {
+    await client.replyMessage(replyToken, getVideoFlexMessage());
+    return;
+  }
+
+  if (userText === '我想直接詢問') {
+    // Let it fall through to Gemini, but maybe with a specific prompt or state?
+    // For now, let Gemini handle it naturally as Casey.
+  }
 
   // --- A. 群組/多人聊天室 邏輯 ---
   if (sourceType === 'group' || sourceType === 'room') {
