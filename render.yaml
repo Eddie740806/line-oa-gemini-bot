@@ -14,3 +14,9 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: gemini-2.0-flash
+      - key: GOOGLE_SHEETS_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_EMAIL
+        sync: false
+      - key: GOOGLE_PRIVATE_KEY
+        sync: false

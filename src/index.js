@@ -7,9 +7,8 @@ require('dotenv').config();
 const express = require('express');
 const { Client, middleware } = require('@line/bot-sdk');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const fs = require('fs');
-const path = require('path');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const { appendLeadToSheet } = require('./googleSheets');
 
 // 1. LINE 憑證檢查
 const lineConfig = {
@@ -56,16 +55,14 @@ const STATES = {
   AWAITING_TIME: 'AWAITING_TIME'
 };
 
-// 儲存名單到 CSV
-function saveLeadToCSV(userId, data) {
-  const filePath = path.join(__dirname, '../leads.csv');
-  const timestamp = new Date().toISOString();
-  const newLine = `"${timestamp}","${data.name}","${data.phone}","${data.preferredTime}","NEW"\n`;
-
-  fs.appendFile(filePath, newLine, (err) => {
-    if (err) console.error('Error saving lead:', err);
-    else console.log(`Lead saved for user ${userId}`);
-  });
+// 儲存名單到 Google Sheets
+async function saveLeadToSheet(userId, data) {
+  try {
+    await appendLeadToSheet(userId, data);
+  } catch (error) {
+    console.error('Failed to save lead to Google Sheets:', error.message);
+    // Optionally: implement fallback or notification mechanism
+  }
 }
 
 //=================================================================
@@ -248,7 +245,7 @@ async function handleEvent(event) {
   // 4. 接收方便時段 -> 完成
   if (session.state === STATES.AWAITING_TIME) {
     session.data.preferredTime = userText;
-    saveLeadToCSV(userId, session.data);
+    await saveLeadToSheet(userId, session.data);
     userSessions.delete(userId);
     await client.replyMessage(replyToken, {
       type: 'text',
